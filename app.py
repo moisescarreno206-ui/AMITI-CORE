@@ -2,42 +2,41 @@ from flask import Flask, render_template, request
 import importlib
 import pkgutil
 import nucleos
+import os
 
 app = Flask(__name__)
 
-# --- 1. RUTA DE INTERFAZ ---
+# --- RUTA DE INTERFAZ (Tu Chat Neón) ---
 @app.route('/')
 def home():
+    # Aseguramos que busque en la carpeta correcta 'templates'
     return render_template('index.html')
 
-# --- 2. ORQUESTADOR DINÁMICO (Detecta automáticamente nuevos núcleos) ---
+# --- DETECTOR AUTOMÁTICO DE NÚCLEOS (Tu mejora infinita) ---
 def obtener_nucleos_disponibles():
-    # Esta línea escanea la carpeta 'nucleos' cada vez que el sistema se inicia
     return [name for _, name, _ in pkgutil.iter_modules(nucleos.__path__) if name.startswith('n')]
 
-# --- 3. RUTA DE PROCESAMIENTO (Cerebro n43 + Memoria + Exploración) ---
+# --- PROCESAMIENTO INTELIGENTE (Cerebro n43) ---
 @app.route('/procesar')
 def procesar():
     comando = request.args.get('comando', '').lower()
     try:
-        # El n43 actúa como director de orquesta
         n43 = importlib.import_module("nucleos.n43_inteligencia_interpretativa")
-        respuesta = n43.procesar_comando(comando)
-        return {"respuesta": respuesta}
+        return {"respuesta": n43.procesar_comando(comando)}
     except Exception as e:
-        return {"respuesta": f"Error de núcleo: {str(e)}"}
+        return {"respuesta": f"Sistema activo, pero hubo un error: {str(e)}"}
 
-# --- 4. RUTA DE EJECUCIÓN (Compatibilidad con el sistema viejo) ---
+# --- COMPATIBILIDAD VIEJA (Ejecución directa) ---
 @app.route('/ejecutar/<nombre_modulo>/<nombre_funcion>')
 def ejecutar(nombre_modulo, nombre_funcion):
     if nombre_modulo not in obtener_nucleos_disponibles():
-        return {"estado": "error", "detalle": "Núcleo no encontrado en la base de datos"}
+        return {"estado": "error", "detalle": "Núcleo no detectado"}
     try:
         modulo = importlib.import_module(f"nucleos.{nombre_modulo}")
         funcion = getattr(modulo, nombre_funcion)
         return {"resultado": funcion()}
     except Exception as e:
-        return {"estado": "error", "detalle": str(e)}
+        return {"resultado": "error", "detalle": str(e)}
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
