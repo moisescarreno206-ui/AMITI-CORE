@@ -1,13 +1,20 @@
-import sys
-import os
-sys.path.append(os.getcwd())
+from flask import Flask
+# ... otros imports que ya tengas ...
 
-from nucleos.n01_orquestador import app
-from nucleos.n05_activador import iniciar_activador
+app = Flask(__name__)
 
-# Iniciamos el activador
-iniciar_activador()
+# Tu ruta principal actual
+@app.route('/')
+def home():
+    return "AMITI está activa."
 
-if __name__ == "__main__":
+# AGREGA AQUÍ TU NUEVA RUTA DE PRUEBA
+@app.route('/test-email')
+def test_email():
+    from nucleos.n03_notificador import probar_correo
+    probar_correo()
+    return "¡Prueba enviada! Revisa tu bandeja de entrada."
+
+if __name__ == '__main__':
     app.run()
     
