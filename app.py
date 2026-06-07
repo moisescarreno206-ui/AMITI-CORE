@@ -5,34 +5,33 @@ import nucleos
 
 app = Flask(__name__)
 
-# --- 1. RUTA DE INTERFAZ (Tu chat Neón) ---
+# --- 1. RUTA DE INTERFAZ ---
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# --- 2. ORQUESTADOR DINÁMICO (Sin límites: detecta todo automáticamente) ---
+# --- 2. ORQUESTADOR DINÁMICO (Detecta automáticamente nuevos núcleos) ---
 def obtener_nucleos_disponibles():
-    # Escanea la carpeta 'nucleos' en tiempo real
+    # Esta línea escanea la carpeta 'nucleos' cada vez que el sistema se inicia
     return [name for _, name, _ in pkgutil.iter_modules(nucleos.__path__) if name.startswith('n')]
 
-# --- 3. RUTA DE PROCESAMIENTO ---
+# --- 3. RUTA DE PROCESAMIENTO (Cerebro n43 + Memoria + Exploración) ---
 @app.route('/procesar')
 def procesar():
     comando = request.args.get('comando', '').lower()
-    
-    # Intenta usar el n43 para interpretar
     try:
+        # El n43 actúa como director de orquesta
         n43 = importlib.import_module("nucleos.n43_inteligencia_interpretativa")
         respuesta = n43.procesar_comando(comando)
         return {"respuesta": respuesta}
     except Exception as e:
-        return {"respuesta": f"Cerebro no detectado: {str(e)}"}
+        return {"respuesta": f"Error de núcleo: {str(e)}"}
 
-# --- 4. RUTA DE EJECUCIÓN DIRECTA (Compatible con tus 44+ núcleos) ---
+# --- 4. RUTA DE EJECUCIÓN (Compatibilidad con el sistema viejo) ---
 @app.route('/ejecutar/<nombre_modulo>/<nombre_funcion>')
 def ejecutar(nombre_modulo, nombre_funcion):
     if nombre_modulo not in obtener_nucleos_disponibles():
-        return {"estado": "error", "detalle": "Núcleo no existe en el sistema"}
+        return {"estado": "error", "detalle": "Núcleo no encontrado en la base de datos"}
     try:
         modulo = importlib.import_module(f"nucleos.{nombre_modulo}")
         funcion = getattr(modulo, nombre_funcion)
