@@ -1,18 +1,19 @@
-from flask import Flask, render_template  # <--- Asegúrate de importar render_template
+from flask import Flask, render_template
 import importlib
 import pkgutil
 import nucleos
 
 app = Flask(__name__)
 
-# --- NUEVA RUTA PARA TU DISEÑO NEÓN ---
+# 1. RUTA DE INTERFAZ (Tu chat Neón)
 @app.route('/')
 def home():
-    return render_template('index.html') # Esto buscará el archivo en /templates/
-# --------------------------------------
+    return render_template('index.html')
 
+# 2. RUTA DE API (Tu orquestador de 42 núcleos)
 def obtener_nucleos_disponibles():
     modulos = []
+    # Escanea la carpeta 'nucleos' automáticamente
     for _, name, _ in pkgutil.iter_modules(nucleos.__path__):
         if name.startswith('n'):
             modulos.append(name)
@@ -26,6 +27,7 @@ def ejecutar(nombre_modulo, nombre_funcion):
     try:
         modulo = importlib.import_module(f"nucleos.{nombre_modulo}")
         funcion = getattr(modulo, nombre_funcion)
+        # Ejecuta la lógica del núcleo
         return {"resultado": funcion()}
     except Exception as e:
         return {"estado": "error", "detalle": str(e)}
