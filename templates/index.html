@@ -1,37 +1,50 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { margin: 0; background: #000; color: #0ff; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
-        #chat { flex: 1; padding: 20px; overflow-y: auto; border: 2px solid #f0f; box-shadow: 0 0 10px #f0f; }
-        .mensaje { margin-bottom: 10px; padding: 10px; border-radius: 15px; background: #111; }
-        .yo { text-align: right; color: #fff; }
-        .amiti { text-align: left; color: #0ff; }
-        #inputArea { display: flex; padding: 10px; background: #111; }
-        input { flex: 1; padding: 15px; border-radius: 20px; border: 1px solid #0ff; background: #000; color: #0ff; }
-    </style>
-</head>
-<body>
-    <div id="chat"><div class="mensaje amiti">AMITI: Sistema activo. ¿Qué deseas, Moisés?</div></div>
-    <div id="inputArea">
-        <input type="text" id="userInput" placeholder="Escribe mensaje...">
-        <button onclick="enviar()">Enviar</button>
-    </div>
-    <script>
-        async function enviar() {
-            let input = document.getElementById('userInput');
-            let chat = document.getElementById('chat');
-            let msg = input.value;
-            chat.innerHTML += `<div class="mensaje yo">Tú: ${msg}</div>`;
-            
-            let res = await fetch(`/procesar?comando=${encodeURIComponent(msg)}`);
-            let data = await res.json();
-            
-            chat.innerHTML += `<div class="mensaje amiti">AMITI: ${data.respuesta}</div>`;
-            input.value = '';
-            chat.scrollTop = chat.scrollHeight;
-        }
-    </script>
-</body>
-</html>
+<style>
+    body { 
+        margin: 0; 
+        background: #050505; 
+        color: #00f2ff; 
+        font-family: 'Segoe UI', sans-serif; 
+        display: flex; 
+        flex-direction: column; 
+        height: 100vh; 
+    }
+    #chat { 
+        flex: 1; 
+        padding: 20px; 
+        overflow-y: auto; 
+        border: 2px solid #ff00ff; 
+        border-radius: 20px; 
+        margin: 10px;
+        box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    }
+    .mensaje { 
+        margin-bottom: 15px; 
+        padding: 12px; 
+        border-radius: 15px; 
+        max-width: 80%;
+    }
+    .amiti { background: #1a1a1a; border-left: 4px solid #00f2ff; align-self: flex-start; }
+    .yo { background: #2a002a; border-right: 4px solid #ff00ff; align-self: flex-end; margin-left: auto; }
+    #inputArea { 
+        display: flex; 
+        padding: 15px; 
+        background: #000; 
+        border-top: 1px solid #333; 
+    }
+    input { 
+        flex: 1; 
+        padding: 12px; 
+        border-radius: 20px; 
+        border: 1px solid #00f2ff; 
+        background: #080808; 
+        color: #fff; 
+    }
+    button { 
+        background: #ff00ff; 
+        border: none; 
+        color: white; 
+        padding: 10px 20px; 
+        border-radius: 20px; 
+        margin-left: 10px; 
+    }
+</style>
