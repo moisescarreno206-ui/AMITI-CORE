@@ -1,20 +1,12 @@
-from flask import Flask
-# ... otros imports que ya tengas ...
+import traceback # Añade esto arriba en los imports de app.py
 
-app = Flask(__name__)
-
-# Tu ruta principal actual
-@app.route('/')
-def home():
-    return "AMITI está activa."
-
-# AGREGA AQUÍ TU NUEVA RUTA DE PRUEBA
 @app.route('/test-email')
 def test_email():
-    from nucleos.n03_notificador import probar_correo
-    probar_correo()
-    return "¡Prueba enviada! Revisa tu bandeja de entrada."
-
-if __name__ == '__main__':
-    app.run()
-    
+    try:
+        from nucleos.n03_notificador import probar_correo
+        resultado = probar_correo()
+        return f"Éxito: {resultado}"
+    except Exception:
+        # Esto te mostrará el error detallado en la pantalla de tu celular
+        return f"Error detallado: {traceback.format_exc()}"
+        
