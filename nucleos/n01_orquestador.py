@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-# Importamos directamente desde el mismo nivel
 from nucleos.n02_cognicion import analizar_seguridad
+from nucleos.n03_notificador import generar_alerta
 
 app = Flask(__name__)
 
@@ -8,9 +8,11 @@ app = Flask(__name__)
 def orquestador():
     if request.method == 'POST':
         datos = request.json
-        # Analizamos los datos con el nuevo núcleo 02
-        resultado = analizar_seguridad(str(datos))
-        return jsonify(resultado)
+        # 1. Cognición
+        analisis = analizar_seguridad(str(datos))
+        # 2. Notificación
+        resultado_final = generar_alerta(analisis)
+        return jsonify(resultado_final)
     
-    return jsonify({"nucleo": "01_ORQUESTADOR", "estado": "ACTIVO", "mensaje": "Esperando datos de seguridad."})
+    return jsonify({"nucleo": "01_ORQUESTADOR", "estado": "ACTIVO", "mensaje": "Esperando comandos..."})
     
