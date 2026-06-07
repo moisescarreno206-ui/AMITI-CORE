@@ -1,13 +1,16 @@
 import sys
 import os
-# Añade la carpeta actual al path de Python
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+# Esto fuerza a Python a incluir la carpeta actual en su lista de búsqueda
+sys.path.append(os.getcwd())
 
 from nucleos.n01_orquestador import app
 from nucleos.n05_activador import iniciar_activador
 
+# Iniciamos el activador
 iniciar_activador()
 
+# El servidor Gunicorn usará esta variable 'app'
 if __name__ == "__main__":
     app.run()
     
