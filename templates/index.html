@@ -1,38 +1,27 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMITI-CORE | Neón</title>
     <style>
-        body { 
-            background-color: #050505; 
-            color: #00F2FF; 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0;
-        }
-        .chat-container { 
-            width: 90%; 
-            max-width: 400px; 
-            border: 2px solid #FF00FF; 
-            padding: 25px; 
-            border-radius: 25px; 
-            box-shadow: 0 0 20px #FF00FF, inset 0 0 10px #FF00FF;
-            text-align: center;
-        }
-        h1 { margin: 0; text-shadow: 0 0 10px #00F2FF; }
-        p { font-size: 1.2em; margin-top: 15px; }
+        body { background: #050505; color: #00f2ff; font-family: sans-serif; display: flex; justify-content: center; height: 100vh; margin: 0; }
+        .chat-box { width: 100%; max-width: 400px; display: flex; flex-direction: column; padding: 20px; }
+        #mensajes { flex-grow: 1; border: 2px solid #ff00ff; border-radius: 20px; padding: 15px; margin-bottom: 10px; overflow-y: auto; }
+        input { background: #1a1a1a; border: 1px solid #00f2ff; color: white; padding: 10px; border-radius: 10px; }
     </style>
 </head>
 <body>
-    <div class="chat-container">
-        <h1>AMITI-CORE</h1>
-        <p>Sistema Consciente Online</p>
-        <p style="color: #FF00FF;">Modo Neón: Activado</p>
+    <div class="chat-box">
+        <div id="mensajes">AMITI: Sistema Online. Escribe algo...</div>
+        <input type="text" id="userInput" placeholder="Escribe a AMITI...">
     </div>
+    <script>
+        document.getElementById('userInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                let msg = this.value;
+                document.getElementById('mensajes').innerHTML += `<p>Tú: ${msg}</p>`;
+                // Aquí conectaríamos con el backend
+                this.value = '';
+            }
+        });
+    </script>
 </body>
 </html>
