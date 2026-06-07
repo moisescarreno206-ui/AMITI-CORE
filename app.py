@@ -5,24 +5,24 @@ import nucleos
 
 app = Flask(__name__)
 
-# --- PASO 1: RUTA DE INTERFAZ (Tu chat Neón) ---
+# --- 1. RUTA DE INTERFAZ (Tu chat Neón) ---
 @app.route('/')
 def home():
     return render_template('index.html')
 
-# --- PASO 3: RUTA DE PROCESAMIENTO (Tu nuevo puente al n43) ---
+# --- 2. RUTA DE PROCESAMIENTO (El puente al Cerebro n43) ---
 @app.route('/procesar')
 def procesar():
     comando = request.args.get('comando', '')
-    # Importamos dinámicamente el núcleo de inteligencia
     try:
+        # Llama al nuevo núcleo de inteligencia
         n43 = importlib.import_module("nucleos.n43_inteligencia_interpretativa")
         respuesta = n43.procesar_comando(comando)
         return {"respuesta": respuesta}
     except Exception as e:
-        return {"respuesta": f"Error de sistema: {str(e)}"}
+        return {"respuesta": f"Error de núcleo: {str(e)}"}
 
-# --- TU ORQUESTADOR VIEJO (INTACTO) ---
+# --- 3. TU ORQUESTADOR VIEJO (Funcionalidad intacta) ---
 def obtener_nucleos_disponibles():
     modulos = []
     for _, name, _ in pkgutil.iter_modules(nucleos.__path__):
