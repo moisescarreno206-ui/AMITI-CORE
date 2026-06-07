@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #050505; color: #00f2ff; font-family: sans-serif; display: flex; justify-content: center; height: 100vh; margin: 0; }
-        .chat-box { width: 100%; max-width: 400px; display: flex; flex-direction: column; padding: 20px; }
-        #mensajes { flex-grow: 1; border: 2px solid #ff00ff; border-radius: 20px; padding: 15px; margin-bottom: 10px; overflow-y: auto; }
-        input { background: #1a1a1a; border: 1px solid #00f2ff; color: white; padding: 10px; border-radius: 10px; }
+        body { margin: 0; background: #000; color: #0ff; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+        #chat { flex: 1; padding: 20px; overflow-y: auto; border: 2px solid #f0f; box-shadow: 0 0 10px #f0f; }
+        .mensaje { margin-bottom: 10px; padding: 10px; border-radius: 15px; background: #111; }
+        .yo { text-align: right; color: #fff; }
+        .amiti { text-align: left; color: #0ff; }
+        #inputArea { display: flex; padding: 10px; background: #111; }
+        input { flex: 1; padding: 15px; border-radius: 20px; border: 1px solid #0ff; background: #000; color: #0ff; }
     </style>
 </head>
 <body>
-    <div class="chat-box">
-        <div id="mensajes">AMITI: Sistema Online. Escribe algo...</div>
-        <input type="text" id="userInput" placeholder="Escribe a AMITI...">
+    <div id="chat"><div class="mensaje amiti">AMITI: Sistema activo. ¿Qué deseas, Moisés?</div></div>
+    <div id="inputArea">
+        <input type="text" id="userInput" placeholder="Escribe mensaje...">
+        <button onclick="enviar()">Enviar</button>
     </div>
     <script>
-        document.getElementById('userInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                let msg = this.value;
-                document.getElementById('mensajes').innerHTML += `<p>Tú: ${msg}</p>`;
-                // Aquí conectaríamos con el backend
-                this.value = '';
-            }
-        });
+        async function enviar() {
+            let input = document.getElementById('userInput');
+            let chat = document.getElementById('chat');
+            let msg = input.value;
+            chat.innerHTML += `<div class="mensaje yo">Tú: ${msg}</div>`;
+            
+            let res = await fetch(`/procesar?comando=${encodeURIComponent(msg)}`);
+            let data = await res.json();
+            
+            chat.innerHTML += `<div class="mensaje amiti">AMITI: ${data.respuesta}</div>`;
+            input.value = '';
+            chat.scrollTop = chat.scrollHeight;
+        }
     </script>
 </body>
 </html>
