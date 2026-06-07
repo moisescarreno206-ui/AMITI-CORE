@@ -1,19 +1,29 @@
 import os
+import importlib
 from flask import Flask, jsonify
-from nucleos.n03_notificador import generar_alerta, alertas_pendientes
 
 app = Flask(__name__)
 
+# Lista de tus núcleos (aquí los irás agregando poco a poco hasta llegar a 35)
+NUCLEOS_REGISTRADOS = ['n03_notificador'] 
+
+def ejecutar_nucleo(nombre, funcion, *args):
+    """Carga dinámicamente cualquier núcleo y ejecuta su función."""
+    modulo = importlib.import_module(f"nucleos.{nombre}")
+    func = getattr(modulo, funcion)
+    return func(*args)
+
 @app.route('/')
 def home():
-    return "AMITI-CORE: Sistema operativo y núcleo 03 activos."
+    return "AMITI-CORE: Sistema de 35 núcleos en preparación."
 
-@app.route('/test-alerta')
-def test_alerta():
-    """Ruta para simular una alerta crítica y ver si se registra."""
-    alerta_falsa = {"estado_sistema": "ALERTA_CRITICA", "detalles": "Prueba de buzón exitosa"}
-    resultado = generar_alerta(alerta_falsa)
-    return jsonify({"resultado": resultado, "alertas_en_buzon": len(alertas_pendientes)})
+@app.route('/ejecutar/<nombre_nucleo>/<nombre_funcion>')
+def ejecutar(nombre_nucleo, nombre_funcion):
+    try:
+        resultado = ejecutar_nucleo(nombre_nucleo, nombre_funcion)
+        return jsonify({"estado": "exito", "data": resultado})
+    except Exception as e:
+        return jsonify({"estado": "error", "mensaje": str(e)})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
