@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>AMITI-CORE TEST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMITI-CORE</title>
+    <style>
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        #chat-window { flex: 1; overflow-y: auto; padding: 20px; border-bottom: 1px solid #00f2ff; }
+        #input-area { padding: 20px; display: flex; background: #0a0a0a; }
+        input { flex: 1; background: #000; border: 1px solid #00f2ff; color: #00f2ff; padding: 10px; }
+        button { background: #00f2ff; border: none; padding: 10px 20px; color: #000; font-weight: bold; cursor: pointer; }
+        .msg { margin-bottom: 10px; }
+    </style>
 </head>
-<body style="background-color: white; color: black; font-family: sans-serif; padding: 50px;">
-    <h1>AMITI-CORE ESTÁ FUNCIONANDO</h1>
-    <p>Si ves este texto, el servidor está perfectamente y el problema era tu código anterior.</p>
+<body>
+
+    <div id="chat-window">
+        <div class="msg">AMITI: Sistema cargado. Iniciando núcleos...</div>
+    </div>
+    <div id="input-area">
+        <input type="text" id="userInput" placeholder="Enviar comando...">
+        <button onclick="enviar()">ENVIAR</button>
+    </div>
+
+    <script>
+        async function enviar() {
+            const input = document.getElementById('userInput');
+            const chat = document.getElementById('chat-window');
+            const comando = input.value;
+            
+            if (!comando) return;
+
+            chat.innerHTML += `<div class="msg">> ${comando}</div>`;
+            
+            try {
+                const response = await fetch(`/procesar?comando=${encodeURIComponent(comando)}`);
+                const data = await response.json();
+                chat.innerHTML += `<div class="msg">AMITI: ${data.respuesta}</div>`;
+                chat.scrollTop = chat.scrollHeight;
+            } catch (error) {
+                chat.innerHTML += `<div class="msg">ERROR: Fallo de conexión con núcleos.</div>`;
+            }
+            input.value = '';
+        }
+    </script>
 </body>
 </html>
