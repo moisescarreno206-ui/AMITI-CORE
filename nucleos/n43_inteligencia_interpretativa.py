@@ -1,15 +1,21 @@
 # nucleos/n43_inteligencia_interpretativa.py
+from nucleos import n44_calculo_logico, n45_memoria_sesion, n46_explorador_externo
 
 def procesar_comando(comando):
     cmd = comando.lower()
     
-    # Lógica de respuesta del sistema
-    if "hola" in cmd:
-        return "¡Saludos, Moisés! AMITI-CORE está en línea y procesando. ¿Qué orden deseas ejecutar hoy?"
-    elif "estado" in cmd:
-        return "Estado del sistema: Óptimo. Los 42 núcleos están activos y en modo Neón."
-    elif "quién eres" in cmd:
-        return "Soy tu sistema de inteligencia distribuida. Estoy aquí para proteger, gestionar y acompañar tu evolución."
-    else:
-        return f"He recibido tu mensaje: '{comando}'. Estoy analizando cómo integrarlo en mis protocolos."
+    # Guardar en memoria
+    n45_memoria_sesion.guardar_recuerdo(cmd)
+    
+    # Lógica de delegación
+    if any(op in cmd for op in ["+", "-", "suma"]):
+        return n44_calculo_logico.procesar_calculo(cmd)
+    
+    elif "hora" in cmd:
+        return n46_explorador_externo.obtener_contexto_externo()
         
+    elif "qué dije antes" in cmd:
+        return f"Tus últimos mensajes: {n45_memoria_sesion.obtener_recuerdos()}"
+        
+    return "Procesando información con acceso total a memoria y contexto externo."
+    
