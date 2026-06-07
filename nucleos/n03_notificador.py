@@ -32,3 +32,8 @@ def generar_alerta(analisis_previo):
     
     return {"reporte": "Procesado", "detalles": analisis_previo}
     
+# Esta función es solo para probar que el correo llega
+def probar_correo():
+    mensaje_prueba = {"estado_sistema": "ALERTA_CRITICA", "info": "Esta es una prueba de AMITI"}
+    return generar_alerta(mensaje_prueba)
+    
