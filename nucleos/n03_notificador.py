@@ -1,25 +1,20 @@
 import requests
+import os
 
 def enviar_whatsapp(mensaje):
-    # Sustituye aquí con tus datos reales
-    NUMERO = "+58XXXXXXXXXX" # Tu número con código de país
+    # Aquí irán tus datos. 
+    # TIP: Puedes poner estos valores en las variables de entorno de Render
+    # para que nadie más pueda ver tu clave.
+    NUMERO = "+58XXXXXXXXXX" # Tu número con código de país (ej: +58412...)
     APIKEY = "TU_APIKEY_QUE_TE_DIO_CALLMEBOT"
     
-    # Esta URL le envía el mensaje directo a tu WhatsApp
+    # URL de notificación directa
     url = f"https://api.callmebot.com/whatsapp.php?phone={NUMERO}&text={mensaje}&apikey={APIKEY}"
     
     try:
-        requests.get(url) # AMITI envía el mensaje
+        requests.get(url)
         return True
     except Exception as e:
-        print(f"Error de conexión: {e}")
+        print(f"Error al notificar: {e}")
         return False
-
-def generar_alerta(analisis_previo):
-    if analisis_previo["estado_sistema"] == "ALERTA_CRITICA":
-        mensaje = "!!! AMITI: Alerta Critica Detectada !!!"
-        enviar_whatsapp(mensaje)
-    else:
-        mensaje = "AMITI: Estado Normal."
-    return {"reporte": mensaje}
-    
+        
