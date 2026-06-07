@@ -1,12 +1,25 @@
+import requests
+
+# Solo necesitas tu número y la APIKEY que te da CallMeBot
+NUMERO = "+58XXXXXXXXXX" 
+APIKEY = "TU_APIKEY_AQUI"
+
+def enviar_whatsapp(mensaje):
+    try:
+        # Codificamos el mensaje para que la URL sea válida
+        url = f"https://api.callmebot.com/whatsapp.php?phone={NUMERO}&text={mensaje}&apikey={APIKEY}"
+        requests.get(url)
+        return True
+    except Exception as e:
+        print(f"Error al notificar: {e}")
+        return False
+
 def generar_alerta(analisis_previo):
-    # Formatea la salida para que sea fácil de leer (como un informe oficial)
     if analisis_previo["estado_sistema"] == "ALERTA_CRITICA":
-        mensaje = "!!! ADVERTENCIA: AMITI ha detectado una anomalía de seguridad !!!"
+        mensaje = "!!! AMITI: Alerta Critica Detectada !!!"
+        enviar_whatsapp(mensaje)
     else:
-        mensaje = "Estado del sistema: Normal. Todo bajo control."
+        mensaje = "AMITI: Estado Normal."
         
-    return {
-        "reporte": mensaje,
-        "detalles": analisis_previo
-    }
-  
+    return {"reporte": mensaje, "detalles": analisis_previo}
+    
