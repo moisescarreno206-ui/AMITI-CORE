@@ -2,19 +2,16 @@ import requests
 import os
 
 def enviar_whatsapp(mensaje):
-    # Aquí irán tus datos. 
-    # TIP: Puedes poner estos valores en las variables de entorno de Render
-    # para que nadie más pueda ver tu clave.
-    NUMERO = "+58XXXXXXXXXX" # Tu número con código de país (ej: +58412...)
-    APIKEY = "TU_APIKEY_QUE_TE_DIO_CALLMEBOT"
+    # Asegúrate de poner tu número con el formato correcto: +58412xxxxxxx
+    NUMERO = "+58XXXXXXXXXX" 
+    APIKEY = "TU_APIKEY_AQUI"
     
-    # URL de notificación directa
     url = f"https://api.callmebot.com/whatsapp.php?phone={NUMERO}&text={mensaje}&apikey={APIKEY}"
     
     try:
-        requests.get(url)
-        return True
+        respuesta = requests.get(url)
+        print(f"Respuesta del bot: {respuesta.status_code}") # Esto aparecerá en los logs de Render
+        return respuesta.status_code == 200
     except Exception as e:
-        print(f"Error al notificar: {e}")
+        print(f"Error de conexión: {e}")
         return False
-        
