@@ -1,24 +1,21 @@
 import os
-import traceback
-from flask import Flask
-from nucleos.n03_notificador import probar_correo
+from flask import Flask, jsonify
+from nucleos.n03_notificador import generar_alerta, alertas_pendientes
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "AMITI-CORE está operando correctamente."
+    return "AMITI-CORE: Sistema operativo y núcleo 03 activos."
 
-@app.route('/test-email')
-def test_email():
-    try:
-        # Intentamos ejecutar la función
-        resultado = probar_correo()
-        return f"Resultado exitoso: {resultado}"
-    except Exception:
-        # Si falla, nos muestra el error técnico aquí mismo
-        return f"ERROR DETECTADO: {traceback.format_exc()}"
+@app.route('/test-alerta')
+def test_alerta():
+    """Ruta para simular una alerta crítica y ver si se registra."""
+    alerta_falsa = {"estado_sistema": "ALERTA_CRITICA", "detalles": "Prueba de buzón exitosa"}
+    resultado = generar_alerta(alerta_falsa)
+    return jsonify({"resultado": resultado, "alertas_en_buzon": len(alertas_pendientes)})
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+    
