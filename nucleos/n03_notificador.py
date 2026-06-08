@@ -1,30 +1,20 @@
-from twilio.rest import Client
+# nucleos/n03_seguridad.py
+import requests
 
-# Tus credenciales de Twilio
-ACCOUNT_SID = 'TU_ACCOUNT_SID'
-AUTH_TOKEN = 'TU_AUTH_TOKEN'
-TWILIO_NUMBER = 'whatsapp:+14155238886' # El número de sandbox de Twilio
-MI_NUMERO = 'whatsapp:+58XXXXXXXXXX' # Tu número de WhatsApp
-
-def enviar_whatsapp(mensaje):
-    try:
-        client = Client(ACCOUNT_SID, AUTH_TOKEN)
-        message = client.messages.create(
-            body=mensaje,
-            from_=TWILIO_NUMBER,
-            to=MI_NUMERO
-        )
-        return True
-    except Exception as e:
-        print(f"Error enviando WhatsApp: {e}")
-        return False
-
-def generar_alerta(analisis_previo):
-    if analisis_previo["estado_sistema"] == "ALERTA_CRITICA":
-        texto = "!!! AMITI: Alerta Crítica Detectada !!!"
-        enviar_whatsapp(texto)
-    else:
-        texto = "AMITI: Estado del sistema normal."
-        
-    return {"reporte": texto, "detalles": analisis_previo}
+def enviar_alerta(tipo_alerta, mensaje):
+    # Número de destino: +58 4144627194
+    telefono = "584144627194"
+    alerta_formateada = f"⚠️ ALERTA AMITI ({tipo_alerta}): {mensaje}"
     
+    # Aquí integrarías tu servicio de API de WhatsApp (ej. Twilio, CallMeBot, etc.)
+    # Ejemplo conceptual:
+    # requests.post("URL_DE_TU_API_WHATSAPP", json={"to": telefono, "text": alerta_formateada})
+    
+    print(f"Alerta enviada a {telefono}: {alerta_formateada}")
+    return True
+
+def monitorear_agresion(texto):
+    if "ataque" in texto or "hackeo" in texto:
+        enviar_alerta("SEGURIDAD DIGITAL", texto)
+        return "Alerta enviada a tu móvil."
+    return "Monitoreo activo."
