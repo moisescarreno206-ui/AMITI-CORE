@@ -1,21 +1,11 @@
-# nucleos/n43_inteligencia_interpretativa.py
-from nucleos import n44_calculo_logico, n45_memoria_sesion, n46_explorador_externo
+# Dentro de tu n43, ajusta la lógica de delegación así:
+from nucleos import n47_gestor_de_errores
 
-def procesar_comando(comando):
-    cmd = comando.lower()
-    
-    # Guardar en memoria
-    n45_memoria_sesion.guardar_recuerdo(cmd)
-    
-    # Lógica de delegación
-    if any(op in cmd for op in ["+", "-", "suma"]):
+# ... en tu función procesar_comando ...
+try:
+    if "2+2" in cmd:
         return n44_calculo_logico.procesar_calculo(cmd)
-    
-    elif "hora" in cmd:
-        return n46_explorador_externo.obtener_contexto_externo()
-        
-    elif "qué dije antes" in cmd:
-        return f"Tus últimos mensajes: {n45_memoria_sesion.obtener_recuerdos()}"
-        
-    return "Procesando información con acceso total a memoria y contexto externo."
+    # ... resto de tu lógica ...
+except Exception as e:
+    return n47_gestor_de_errores.manejar_error(str(e))
     
