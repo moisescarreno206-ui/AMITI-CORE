@@ -1,14 +1,19 @@
 # nucleos/n50_ejecutor.py
-from nucleos.n46_explorador_externo import analizar_texto
-from nucleos.n53_autonoma_reparadora import reparar_entorno
+import importlib
 
 def ejecutar_accion(comando, tipo):
     try:
-        if tipo == "analisis":
-            return analizar_texto(comando)
-        return f"Accion {tipo} en proceso."
-    except ImportError as e:
-        # Aquí el N53 toma el control total cuando falla una importación
-        return f"Error crítico de red/modulo: {str(e)}. {reparar_entorno()}"
-
-print("AMITI: Núcleos cargados. Esperando comandos.")
+        # Carga dinámica: AMITI busca el módulo según el tipo
+        modulo_nombre = f"nucleos.{tipo}"
+        modulo = importlib.import_module(modulo_nombre)
+        
+        # Ejecuta la función principal del módulo
+        if hasattr(modulo, 'ejecutar'):
+            return modulo.ejecutar(comando)
+        return f"Módulo {tipo} cargado, pero no tiene función 'ejecutar'."
+        
+    except ImportError:
+        return f"Error: No se pudo cargar el núcleo {tipo}. Verifique que el archivo exista."
+    except Exception as e:
+        return f"AMITI Error crítico: {str(e)}"
+        
