@@ -1,7 +1,15 @@
-# nucleos/n46_explorador_externo.py
-from datetime import datetime
+# nucleos/n46_analizador_sentimental.py
 
-def obtener_contexto_externo():
-    """Núcleo de exploración: Obtiene datos del entorno."""
-    hora = datetime.now().strftime("%H:%M")
-    return f"La hora actual del sistema es {hora}."
+def analizar_texto(texto):
+    texto = texto.lower()
+    # Detectar agresividad o peligro
+    palabras_peligro = ["amenaza", "agresión", "hackeo", "insulto"]
+    if any(p in texto for p in palabras_peligro):
+        return "ALERTA: He detectado lenguaje agresivo."
+    
+    # Análisis de humor
+    if "feliz" in texto or "bien" in texto:
+        return "AMITI: Detecto un estado de ánimo positivo."
+        
+    return "Análisis: Tono neutral."
+    
