@@ -1,10 +1,17 @@
-# nucleos/n45_memoria_sesion.py
-# Usaremos una lista global simple para memoria de sesión
-memoria_temporal = []
+import json
 
-def guardar_recuerdo(mensaje):
-    memoria_temporal.append(mensaje)
-    return f"Recuerdo registrado: {mensaje}"
+def guardar_memoria(clave, valor):
+    try:
+        with open("memoria.json", "r+") as f:
+            data = json.load(f)
+            data[clave] = valor
+            f.seek(0)
+            json.dump(data, f)
+        return "Dato guardado."
+    except:
+        return "Error en persistencia."
 
-def obtener_recuerdos():
-    return " | ".join(memoria_temporal[-3:]) # Te devuelve los últimos 3 mensajes
+def leer_memoria(clave):
+    with open("memoria.json", "r") as f:
+        data = json.load(f)
+        return data.get(clave, "No tengo registro de eso.")
