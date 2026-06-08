@@ -1,14 +1,18 @@
 # nucleos/n50_ejecutor.py
-# ... otros imports ...
-from nucleos.n53_autonoma_reparadora import diagnosticar_error 
+from nucleos.n46_explorador_externo import analizar_texto
+from nucleos.n48_arquitecto_autonomo import procesar_comando_arquitecto
+from nucleos.n49_vigilante import vigilar_sistema
+from nucleos.n53_autonoma_reparadora import diagnosticar_error
 
-def ejecutar_accion_segura(comando, tipo):
+def ejecutar_accion(comando, tipo):
     try:
-        # Aquí iría tu lógica normal (procesar_calculo, etc.)
-        # ...
-        return "Ejecución exitosa"
+        if tipo == "analisis":
+            return analizar_texto(comando)
+        elif tipo == "arquitecto":
+            return procesar_comando_arquitecto(comando)
+        elif tipo == "vigilancia":
+            return vigilar_sistema(comando)
+        return "Tipo de acción no reconocido."
     except Exception as e:
-        # Si falla, AMITI se autodiagnostica
-        error_info = str(e)
-        return f"AMITI detectó un error: {error_info}. {diagnosticar_error(error_info)}"
+        return f"Error detectado: {str(e)}. {diagnosticar_error(str(e))}"
         
