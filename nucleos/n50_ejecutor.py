@@ -1,19 +1,14 @@
 # nucleos/n50_ejecutor.py
-from nucleos.n44_calculo_logico import procesar_calculo
-from nucleos.n48_arquitecto_autonomo import procesar_comando_arquitecto
-from nucleos.n03_notificador import enviar_alerta
-from nucleos.n45_memoria import guardar_memoria, leer_memoria
-from nucleos.n46_explorador_externo import analizar_texto
-from nucleos.n49_vigilante import vigilar_sistema
-from nucleos.n52_dominio_de_red import exponer_dominio  # <--- NUEVO
+# ... otros imports ...
+from nucleos.n53_autonoma_reparadora import diagnosticar_error 
 
-def ejecutar_accion(comando, tipo):
-    if tipo == "calculo":
-        return procesar_calculo(comando)
-    elif tipo == "arquitecto":
-        return procesar_comando_arquitecto(comando)
-    elif tipo == "red": # <--- NUEVA CONDICION
-        return exponer_dominio(comando)
-    # ... resto de tus condiciones
-    return "Accion no definida"
-  
+def ejecutar_accion_segura(comando, tipo):
+    try:
+        # Aquí iría tu lógica normal (procesar_calculo, etc.)
+        # ...
+        return "Ejecución exitosa"
+    except Exception as e:
+        # Si falla, AMITI se autodiagnostica
+        error_info = str(e)
+        return f"AMITI detectó un error: {error_info}. {diagnosticar_error(error_info)}"
+        
