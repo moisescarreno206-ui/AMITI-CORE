@@ -1,15 +1,10 @@
 # nucleos/n50_ejecutor.py
-from nucleos.n44_calculo_logico import procesar_calculo
-from nucleos.n48_arquitecto_autonomo import procesar_comando_arquitecto
-from nucleos.n03_notificador import enviar_alerta
-from nucleos.n45_memoria import guardar_memoria, leer_memoria
-from nucleos.n46_analizador_sentimental import analizar_texto  # <--- Nombre corregido
-from nucleos.n49_vigilante import vigilar_sistema
+from nucleos.n51_arquitecto_supremo import potenciar_creacion
+from nucleos.n52_dominio_de_red import exponer_dominio
 
 def ejecutar_accion(comando, tipo):
-    if tipo == "calculo":
-        return procesar_calculo(comando)
-    elif tipo == "arquitecto":
-        return procesar_comando_arquitecto(comando)
-    # ... resto del código
-    
+    # ... (tus otras condiciones)
+    elif tipo == "arquitecto_supremo":
+        return potenciar_creacion(comando)
+    elif tipo == "red":
+        return exponer_dominio(comando)
