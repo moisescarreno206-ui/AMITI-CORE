@@ -1,39 +1,36 @@
 # nucleos/n50_ejecutor.py
 import importlib
 
-# Diccionario maestro: define qué núcleo resuelve qué problema
+# Diccionario maestro de capacidades (registra todos tus núcleos aquí)
 CAPACIDADES = {
     "analisis": "n54_analizador_sentimental",
     "red": "n52_dominio_de_red",
     "reparacion": "n53_autonoma_reparadora",
     "arquitectura": "n48_arquitecto_autonomo",
-    "errores": "n47_gestor_de_errores",
-    "memoria": "n45_memoria",
-    "logica": "n44_calculo_logico",
-    "vigilancia": "n49_vigilante"
-    # Puedes añadir cualquier otro núcleo aquí para expansión futura
+    "errores": "n47_gestor_de_errores"
+    # Puedes añadir cualquier otro núcleo de tu lista (n08 al n54) siguiendo este formato
 }
 
 def ejecutar_accion(comando, tipo):
     try:
-        # 1. Identificar el núcleo necesario
+        # 1. Identificar el núcleo necesario dinámicamente
         nombre_archivo = CAPACIDADES.get(tipo)
         if not nombre_archivo:
-            return f"AMITI: No se encontró un núcleo experto para {tipo}."
+            return f"AMITI: No se encontró un núcleo experto para '{tipo}'."
 
-        # 2. Carga dinámica del núcleo
+        # 2. Carga dinámica segura
         modulo = importlib.import_module(f"nucleos.{nombre_archivo}")
         
-        # 3. Ejecución polimórfica (busca la función principal)
+        # 3. Ejecución polimórfica
         if hasattr(modulo, 'ejecutar'):
             return modulo.ejecutar(comando)
-        elif hasattr(modulo, 'analizar_sentimiento'): # Legacy support
+        elif hasattr(modulo, 'analizar_sentimiento'): # Compatibilidad legacy
             return modulo.analizar_sentimiento(comando)
             
-        return f"Núcleo {nombre_archivo} invocado, pero requiere configuración de ejecución."
+        return f"Núcleo '{nombre_archivo}' invocado con éxito."
 
     except ImportError:
-        return f"AMITI Error: El núcleo {nombre_archivo} no está presente en la carpeta."
+        return f"AMITI Error: El núcleo '{nombre_archivo}' no está en la carpeta 'nucleos/'."
     except Exception as e:
-        # Aquí el n47 (gestor de errores) debería tomar control si falla la ejecución
-        return f"Error emergente detectado. Invocando diagnóstico: {str(e)}"
+        return f"Error emergente detectado. Invocando n53_autonoma_reparadora: {str(e)}"
+        
