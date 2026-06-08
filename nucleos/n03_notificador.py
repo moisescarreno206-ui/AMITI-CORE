@@ -1,20 +1,14 @@
-# nucleos/n03_seguridad.py
 import requests
 
-def enviar_alerta(tipo_alerta, mensaje):
-    # Número de destino: +58 4144627194
+def enviar_alerta(mensaje):
     telefono = "584144627194"
-    alerta_formateada = f"⚠️ ALERTA AMITI ({tipo_alerta}): {mensaje}"
+    apikey = "1062466"  # Tu llave oficial
     
-    # Aquí integrarías tu servicio de API de WhatsApp (ej. Twilio, CallMeBot, etc.)
-    # Ejemplo conceptual:
-    # requests.post("URL_DE_TU_API_WHATSAPP", json={"to": telefono, "text": alerta_formateada})
+    # URL de CallMeBot para mensajes de texto
+    url = f"https://api.callmebot.com/whatsapp.php?phone={telefono}&text={mensaje.replace(' ', '+')}&apikey={apikey}"
     
-    print(f"Alerta enviada a {telefono}: {alerta_formateada}")
-    return True
-
-def monitorear_agresion(texto):
-    if "ataque" in texto or "hackeo" in texto:
-        enviar_alerta("SEGURIDAD DIGITAL", texto)
-        return "Alerta enviada a tu móvil."
-    return "Monitoreo activo."
+    try:
+        requests.get(url)
+        return True
+    except Exception:
+        return False
